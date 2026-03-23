@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Database, BarChart2, Radio } from "lucide-react";
+import { Database, BarChart2, Radio, FlaskConical } from "lucide-react";
 import QueryPanel from "./QueryPanel";
 import ChartConfig from "./ChartConfig";
 import ChartRenderer from "./ChartRenderer";
@@ -16,7 +16,7 @@ type Tab = "query" | "live";
 function defaultSettings(result: QueryResult): ChartSettings {
   const cols = result.schema.map((s) => s.name);
   return {
-    type: "table",
+    type: "line",
     xKey: cols[0] ?? "",
     yKeys: cols.slice(1),
     nameKey: cols[0] ?? "",
@@ -24,9 +24,13 @@ function defaultSettings(result: QueryResult): ChartSettings {
   };
 }
 
+const isDemo = !process.env.NEXT_PUBLIC_BQ_PROJECT_ID;
+
 export default function Dashboard() {
   const [tab, setTab] = useState<Tab>("query");
-  const [sql, setSql] = useState("");
+  const [sql, setSql] = useState(
+    "SELECT month, revenue, expenses, profit\nFROM `demo_dataset.monthly_revenue`\nORDER BY month"
+  );
   const [result, setResult] = useState<QueryResult | null>(null);
   const [settings, setSettings] = useState<ChartSettings | null>(null);
 
@@ -52,6 +56,15 @@ export default function Dashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-6">
+        {/* Demo mode banner */}
+        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800">
+          <FlaskConical size={15} className="shrink-0" />
+          <span>
+            <strong>Demo mode</strong> — no BigQuery credentials configured. Queries return sample revenue data.
+            Set <code className="bg-amber-100 px-1 rounded text-xs">BQ_PROJECT_ID</code> in{" "}
+            <code className="bg-amber-100 px-1 rounded text-xs">.env.local</code> to connect to real BigQuery.
+          </span>
+        </div>
         {/* Tab bar */}
         <div className="flex gap-1 border-b border-gray-200">
           {TABS.map((t) => (
