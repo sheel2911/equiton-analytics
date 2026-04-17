@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Database, BarChart2, Radio, FlaskConical } from "lucide-react";
+import { Database, BarChart2, Radio, FlaskConical, Users } from "lucide-react";
 import QueryPanel from "./QueryPanel";
 import ChartConfig from "./ChartConfig";
 import ChartRenderer from "./ChartRenderer";
 import LiveFeedPanel from "./LiveFeedPanel";
 import SavedQueries from "./SavedQueries";
+import MarketingLeads from "./MarketingLeads";
 import type { QueryResult } from "@/lib/bigquery";
 import type { ChartSettings } from "./ChartConfig";
 import clsx from "clsx";
 
-type Tab = "query" | "live";
+type Tab = "leads" | "query" | "live";
 
 function defaultSettings(result: QueryResult): ChartSettings {
   const cols = result.schema.map((s) => s.name);
@@ -27,9 +28,9 @@ function defaultSettings(result: QueryResult): ChartSettings {
 const isDemo = !process.env.NEXT_PUBLIC_BQ_PROJECT_ID;
 
 export default function Dashboard() {
-  const [tab, setTab] = useState<Tab>("query");
+  const [tab, setTab] = useState<Tab>("leads");
   const [sql, setSql] = useState(
-    "SELECT month, revenue, expenses, profit\nFROM `demo_dataset.monthly_revenue`\nORDER BY month"
+    "SELECT * FROM `equiton.marketing_leads` ORDER BY LeadCreatedDate DESC LIMIT 100"
   );
   const [result, setResult] = useState<QueryResult | null>(null);
   const [settings, setSettings] = useState<ChartSettings | null>(null);
@@ -40,6 +41,7 @@ export default function Dashboard() {
   }
 
   const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
+    { id: "leads", label: "Marketing Leads", icon: <Users size={14} /> },
     { id: "query", label: "Query & Explore", icon: <Database size={14} /> },
     { id: "live", label: "Live Feed", icon: <Radio size={14} /> },
   ];
@@ -57,14 +59,18 @@ export default function Dashboard() {
 
       <main className="max-w-7xl mx-auto px-6 py-6 flex flex-col gap-6">
         {/* Demo mode banner */}
-        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800">
-          <FlaskConical size={15} className="shrink-0" />
-          <span>
-            <strong>Demo mode</strong> — no BigQuery credentials configured. Queries return sample revenue data.
-            Set <code className="bg-amber-100 px-1 rounded text-xs">BQ_PROJECT_ID</code> in{" "}
-            <code className="bg-amber-100 px-1 rounded text-xs">.env.local</code> to connect to real BigQuery.
-          </span>
-        </div>
+        {isDemo && (
+          <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800">
+            <FlaskConical size={15} className="shrink-0" />
+            <span>
+              <strong>Demo mode</strong> — no BigQuery credentials configured. All queries use sample{" "}
+              <code className="bg-amber-100 px-1 rounded text-xs">equiton.marketing_leads</code> data.
+              Set <code className="bg-amber-100 px-1 rounded text-xs">BQ_PROJECT_ID</code> in{" "}
+              <code className="bg-amber-100 px-1 rounded text-xs">.env.local</code> to connect to real BigQuery.
+            </span>
+          </div>
+        )}
+
         {/* Tab bar */}
         <div className="flex gap-1 border-b border-gray-200">
           {TABS.map((t) => (
@@ -84,6 +90,13 @@ export default function Dashboard() {
           ))}
         </div>
 
+        {/* Marketing Leads tab */}
+        {tab === "leads" && (
+          <section className="bg-white rounded-xl border border-gray-200 p-5">
+            <MarketingLeads />
+          </section>
+        )}
+
         {/* Query & Explore tab */}
         {tab === "query" && (
           <div className="flex flex-col gap-6">
@@ -92,10 +105,7 @@ export default function Dashboard() {
                 <h2 className="font-semibold text-gray-800">SQL Query</h2>
                 <SavedQueries currentSql={sql} onLoad={setSql} />
               </div>
-              <QueryPanel
-                onResult={handleResult}
-                defaultSql={sql}
-              />
+              <QueryPanel onResult={handleResult} defaultSql={sql} />
             </section>
 
             {result && settings && (
@@ -123,15 +133,13 @@ export default function Dashboard() {
                 <h2 className="font-semibold text-gray-800">Live Query</h2>
                 <SavedQueries currentSql={sql} onLoad={setSql} />
               </div>
-              <div className="relative">
-                <textarea
-                  value={sql}
-                  onChange={(e) => setSql(e.target.value)}
-                  rows={5}
-                  placeholder="SELECT * FROM `project.dataset.table` LIMIT 500"
-                  className="w-full font-mono text-sm bg-gray-950 text-green-400 rounded-lg p-4 border border-gray-700 focus:outline-none focus:border-blue-500 resize-y placeholder:text-gray-600"
-                />
-              </div>
+              <textarea
+                value={sql}
+                onChange={(e) => setSql(e.target.value)}
+                rows={5}
+                placeholder="SELECT * FROM `equiton.marketing_leads` LIMIT 500"
+                className="w-full font-mono text-sm bg-gray-950 text-green-400 rounded-lg p-4 border border-gray-700 focus:outline-none focus:border-blue-500 resize-y placeholder:text-gray-600"
+              />
             </section>
 
             {sql.trim() && (
