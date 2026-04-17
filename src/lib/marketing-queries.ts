@@ -14,6 +14,7 @@ export interface PrebuiltQuery {
 }
 
 const T = "`exalted-justice-470220-u6.ET_Leads_Detail.et_leads_details_latest`";
+const ML = "`equiton.marketing_leads`";
 
 export const MARKETING_QUERIES: PrebuiltQuery[] = [
   // ── Funnel ────────────────────────────────────────────────────────────────
@@ -414,6 +415,14 @@ ORDER BY total_leads DESC`,
   },
 
   // ── Raw Data ──────────────────────────────────────────────────────────────
+  {
+    id: "marketing_leads_table",
+    category: "Raw Data",
+    title: "equiton.marketing_leads",
+    description: "Full equiton.marketing_leads table — all columns, paginated.",
+    defaultChart: "table",
+    sql: `SELECT * FROM ${ML} ORDER BY LeadCreatedDate DESC LIMIT 500`,
+  },
   {
     id: "all_leads",
     category: "Raw Data",
