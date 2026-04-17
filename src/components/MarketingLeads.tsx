@@ -120,7 +120,7 @@ export default function MarketingLeads() {
         <div>
           <h2 className="font-semibold text-gray-900 flex items-center gap-2">
             <BarChart2 size={16} className="text-blue-600" />
-            equiton.marketing_leads
+            ET_Leads_Detail.et_leads_details_latest
           </h2>
           <p className="text-xs text-gray-400 mt-0.5">
             {MARKETING_QUERIES.length} pre-built client acquisition queries — click any card to run

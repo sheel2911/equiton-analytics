@@ -13,7 +13,7 @@ export interface PrebuiltQuery {
   valueKey?: string;
 }
 
-const T = "equiton.marketing_leads";
+const T = "`exalted-justice-470220-u6.ET_Leads_Detail.et_leads_details_latest`";
 
 export const MARKETING_QUERIES: PrebuiltQuery[] = [
   // ── Funnel ────────────────────────────────────────────────────────────────

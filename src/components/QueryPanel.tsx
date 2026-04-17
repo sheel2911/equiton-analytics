@@ -41,7 +41,7 @@ export default function QueryPanel({ onResult, defaultSql = "" }: Props) {
           value={sql}
           onChange={(e) => setSql(e.target.value)}
           rows={6}
-          placeholder="SELECT * FROM `project.dataset.table` LIMIT 100"
+          placeholder="SELECT * FROM `exalted-justice-470220-u6.ET_Leads_Detail.et_leads_details_latest` LIMIT 100"
           className="w-full font-mono text-sm bg-gray-950 text-green-400 rounded-lg p-4 border border-gray-700 focus:outline-none focus:border-blue-500 resize-y placeholder:text-gray-600"
           onKeyDown={(e) => {
             if ((e.metaKey || e.ctrlKey) && e.key === "Enter") runQuery();

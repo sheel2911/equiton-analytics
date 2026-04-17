@@ -27,8 +27,8 @@ export const DEMO_RESULT: QueryResult = {
   ],
 };
 
-export const DEMO_DATASETS = ["equiton", "analytics", "sales"];
-export const DEMO_TABLES = ["marketing_leads", "monthly_revenue", "transactions"];
+export const DEMO_DATASETS = ["ET_Leads_Detail", "ET_Hist_Data"];
+export const DEMO_TABLES = ["et_leads_details_latest", "marketing_report", "master_data_v2", "whatconverts_leads_raw"];
 
 export function isDemoMode() {
   return !process.env.BQ_PROJECT_ID && !process.env.GOOGLE_APPLICATION_CREDENTIALS;

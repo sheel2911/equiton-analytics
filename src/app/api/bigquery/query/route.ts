@@ -11,8 +11,8 @@ import { MARKETING_QUERIES } from "@/lib/marketing-queries";
 function runDemoQuery(sql: string) {
   const lower = sql.toLowerCase();
 
-  // Route to marketing_leads demo data
-  if (lower.includes("marketing_leads")) {
+  // Route to marketing leads demo data
+  if (lower.includes("et_leads_detail") || lower.includes("et_leads_details_latest") || lower.includes("marketing_leads")) {
     const matched = MARKETING_QUERIES.find((q) => q.sql.replace(/\s+/g, " ").trim() === sql.replace(/\s+/g, " ").trim());
 
     // For pre-built queries we apply simple in-memory aggregation

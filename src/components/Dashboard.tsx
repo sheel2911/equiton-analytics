@@ -30,7 +30,7 @@ const isDemo = !process.env.NEXT_PUBLIC_BQ_PROJECT_ID;
 export default function Dashboard() {
   const [tab, setTab] = useState<Tab>("leads");
   const [sql, setSql] = useState(
-    "SELECT * FROM `equiton.marketing_leads` ORDER BY LeadCreatedDate DESC LIMIT 100"
+    "SELECT * FROM `exalted-justice-470220-u6.ET_Leads_Detail.et_leads_details_latest` ORDER BY LeadCreatedDate DESC LIMIT 100"
   );
   const [result, setResult] = useState<QueryResult | null>(null);
   const [settings, setSettings] = useState<ChartSettings | null>(null);
@@ -63,9 +63,9 @@ export default function Dashboard() {
           <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800">
             <FlaskConical size={15} className="shrink-0" />
             <span>
-              <strong>Demo mode</strong> — no BigQuery credentials configured. All queries use sample{" "}
-              <code className="bg-amber-100 px-1 rounded text-xs">equiton.marketing_leads</code> data.
-              Set <code className="bg-amber-100 px-1 rounded text-xs">BQ_PROJECT_ID</code> in{" "}
+              <strong>Demo mode</strong> — no BigQuery credentials configured. All queries use sample data for{" "}
+              <code className="bg-amber-100 px-1 rounded text-xs">ET_Leads_Detail.et_leads_details_latest</code>.
+              Set <code className="bg-amber-100 px-1 rounded text-xs">BQ_PROJECT_ID=exalted-justice-470220-u6</code> in{" "}
               <code className="bg-amber-100 px-1 rounded text-xs">.env.local</code> to connect to real BigQuery.
             </span>
           </div>
@@ -137,7 +137,7 @@ export default function Dashboard() {
                 value={sql}
                 onChange={(e) => setSql(e.target.value)}
                 rows={5}
-                placeholder="SELECT * FROM `equiton.marketing_leads` LIMIT 500"
+                placeholder="SELECT * FROM `exalted-justice-470220-u6.ET_Leads_Detail.et_leads_details_latest` LIMIT 500"
                 className="w-full font-mono text-sm bg-gray-950 text-green-400 rounded-lg p-4 border border-gray-700 focus:outline-none focus:border-blue-500 resize-y placeholder:text-gray-600"
               />
             </section>
